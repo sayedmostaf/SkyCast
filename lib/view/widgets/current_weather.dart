@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
+import 'package:sky_cast/models/current_weather_model.dart';
 
 class CurrentWeather extends StatelessWidget {
-  const CurrentWeather({super.key});
-
+  const CurrentWeather({super.key, required this.currentWeatherModel});
+  final CurrentWeatherModel currentWeatherModel;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -14,11 +16,11 @@ class CurrentWeather extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '25',
+              '${currentWeatherModel.current!.tempC!.toInt().toString()}˚',
               style: Theme.of(context).textTheme.displayLarge,
             ),
             Text(
-              'rain',
+              currentWeatherModel.current!.condition!.text!,
               style: AppStyles.bodyMediumLarge,
             ),
             const SizedBox(
@@ -31,16 +33,22 @@ class CurrentWeather extends StatelessWidget {
                   width: 5,
                 ),
                 Text(
-                  'Texas City',
-                  style: TextStyle(fontSize: 18),
+                  currentWeatherModel.location!.name!,
+                  style: const TextStyle(fontSize: 18),
                 ),
               ],
             ),
-          const SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text('40˚ / 27˚ Feels like 28˚'),
+            Text(
+                '40˚ / 27˚ Feels like ${currentWeatherModel.current!.feelslikeC!.toInt().toString()}˚'),
           ],
+        ),
+        Image.network(
+          "https:${currentWeatherModel.current!.condition!.icon}"
+              .replaceAll('64x64', '128x128'),
+          scale: .7,
         ),
       ],
     );

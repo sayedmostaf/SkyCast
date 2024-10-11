@@ -41,11 +41,11 @@ class DailyForecast extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-                Text('3%'),
+               const Text('3%'),
                 const SizedBox(
                   width: 40,
                 ),
-                Text(
+               const Text(
                   '40˚ 27˚',
                   style: AppStyles.bodyMediumLarge,
                 ),

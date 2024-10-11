@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:sky_cast/controller/weather_controller.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 
 class CustomDarwer extends StatelessWidget {
-  const CustomDarwer({super.key});
+  const CustomDarwer({super.key, required this.controller});
+  final WeatherController controller;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -36,9 +38,9 @@ class CustomDarwer extends StatelessWidget {
             ),
             drawerLocation(
               icon: Icons.location_pin,
-              location: 'cairo',
-              isDay: 1,
-              temp: '50',
+              location: controller.location,
+              isDay: controller.weather!.current!.isDay,
+              temp: controller.weather!.current!.tempC!.toInt().toString(),
             ),
             const SizedBox(
               height: 20,
@@ -70,11 +72,12 @@ class CustomDarwer extends StatelessWidget {
   }
 }
 
-Widget drawerLocation(
-    {IconData? icon,
-    required String location,
-    int? isDay,
-    required String temp}) {
+Widget drawerLocation({
+  IconData? icon,
+  required String location,
+  int? isDay,
+  required String temp,
+}) {
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: Row(
