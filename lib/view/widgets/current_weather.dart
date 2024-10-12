@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
+import 'package:sky_cast/models/forecast_model.dart';
 
 class CurrentWeather extends StatelessWidget {
-  const CurrentWeather({super.key, required this.currentWeatherModel});
+  const CurrentWeather({super.key, required this.currentWeatherModel, required this.day});
   final CurrentWeatherModel currentWeatherModel;
+  final Day day;
   @override
   Widget build(BuildContext context) {
     return Row(
@@ -19,9 +21,12 @@ class CurrentWeather extends StatelessWidget {
               '${currentWeatherModel.current!.tempC!.toInt().toString()}˚',
               style: Theme.of(context).textTheme.displayLarge,
             ),
-            Text(
-              currentWeatherModel.current!.condition!.text!,
-              style: AppStyles.bodyMediumLarge,
+            SizedBox(
+              height: 150,
+              child: Text(
+                currentWeatherModel.current!.condition!.text!,
+                style: AppStyles.bodyMediumLarge,
+              ),
             ),
             const SizedBox(
               height: 30,
@@ -42,7 +47,7 @@ class CurrentWeather extends StatelessWidget {
               height: 10,
             ),
             Text(
-                '40˚ / 27˚ Feels like ${currentWeatherModel.current!.feelslikeC!.toInt().toString()}˚'),
+                '${day.maxtempC!.toInt()}˚ / ${day.mintempC!.toInt()}˚ Feels like ${currentWeatherModel.current!.feelslikeC!.toInt().toString()}˚'),
           ],
         ),
         Image.network(

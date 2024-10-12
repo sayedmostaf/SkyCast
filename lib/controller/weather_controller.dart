@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
 import 'package:sky_cast/models/forecast_model.dart';
+import 'package:sky_cast/util/helpers/app_helper.dart';
 import 'package:sky_cast/util/services/api_service.dart';
 
 class WeatherController extends GetxController {
@@ -9,23 +10,29 @@ class WeatherController extends GetxController {
   late SharedPreferences sharedPreferences;
   String location = 'London';
   RxBool isLoading = false.obs;
-  CurrentWeatherModel? weather;
+  CurrentWeatherModel? currentWeather;
   ForecastModel? forecastModel;
   Future<void> getCurrentWeather(String location) async {
     isLoading(true);
-    await sharedPreferences.setString('location', location);
-    this.location = location;
     var response = await apiService.getRequst(endPoint: '&q=$location');
 
-    if (response != null) {
-      print(response.toString());
-      weather = CurrentWeatherModel.fromJson(response);
-      forecastModel = ForecastModel.fromJson(response['forecast']);
-    } else {
-      print('req failed');
+    try {
+      if (response != null) {
+        print(response.toString());
+        currentWeather = CurrentWeatherModel.fromJson(response);
+        forecastModel = ForecastModel.fromJson(response);
+      } else {
+        AppHelper.showSnackbar(title: 'Error', message: 'Incorrect location');
+      }
+    } catch (_) {
+      AppHelper.showSnackbar(
+          title: 'Error', message: 'Failed to get location data.');
+    } finally {
+      isLoading(false);
+      await sharedPreferences.setString('location', location);
+      this.location = location;
+      update();
     }
-    isLoading(false);
-    update();
   }
 
   @override
