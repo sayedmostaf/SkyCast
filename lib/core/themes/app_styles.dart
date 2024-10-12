@@ -37,4 +37,24 @@ class AppStyles {
     fontSize: 14,
     fontWeight: FontWeight.w500,
   );
+  static const TextStyle bodyMediumVerySmall = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w500,
+  );
+  static const TextStyle bodyRegularVeryLarge = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w400,
+  );
+  static const TextStyle bodyRegularLarge = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w400,
+  );
+  static const TextStyle bodyRegularMed = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.w400,
+  );
+  static const TextStyle bodyRegularSmall = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w400,
+  );
 }
