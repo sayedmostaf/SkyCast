@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
+import 'package:sky_cast/controller/weather_controller.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
 import 'package:sky_cast/util/helpers/app_helper.dart';
 import 'package:sky_cast/view/widgets/drawer/drawer_location_widget.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer(
-      {super.key, required this.isLoading, this.currentWeatherModel});
-  final bool isLoading;
-  final CurrentWeatherModel? currentWeatherModel;
+  const CustomDrawer({super.key, required this.controller});
+  final WeatherController controller;
   @override
   Widget build(BuildContext context) {
+    final CurrentWeatherModel? currentWeatherModel = controller.currentWeather;
     return Drawer(
       width: AppHelper.screenWidth(context) / 1.2,
       child: SafeArea(
@@ -21,13 +21,28 @@ class CustomDrawer extends StatelessWidget {
           horizontal: 15,
           vertical: 50,
         ),
-        child: isLoading
+        child: controller.isLoading.value
             ? Center(
                 child: Lottie.asset('assets/lotties/loading.json'),
               )
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      iconSize: 30,
+                      alignment: Alignment.topRight,
+                      onPressed: () {
+                        Get.back();
+                        Get.toNamed('/settings');
+                      },
+                      icon: const Icon(Icons.settings),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
                   Row(
                     children: [
                       const Icon(
