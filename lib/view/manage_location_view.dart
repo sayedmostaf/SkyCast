@@ -12,13 +12,13 @@ class ManageLocationView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Manage Locations'),
+        title: const Text('Manage Locations'),
       ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: GetBuilder<WeatherController>(
-              builder: (_) => Column(
+              builder: (controller) => Column(
                     children: [
                       SearchBar(
                         padding: const WidgetStatePropertyAll(
@@ -33,13 +33,16 @@ class ManageLocationView extends StatelessWidget {
                         height: 20,
                       ),
                       SingleChildScrollView(
-                        child: controller.isLoading.value == true
-                            ? Lottie.asset('assets/lotties/search.json')
-                            : LocationWidget(
-                                currentWeatherModel: controller.currentWeather!,
-                                day: controller.forecastModel!.forecast!
-                                    .forecastday!.first.day!,
-                              ),
+                        child: Obx(
+                          () => controller.isLoading.value == true
+                              ? Lottie.asset('assets/lotties/loading.json')
+                              : LocationWidget(
+                                  currentWeatherModel:
+                                      controller.currentWeather!,
+                                  day: controller.forecastModel!.forecast!
+                                      .forecastday!.first.day!,
+                                ),
+                        ),
                       )
                     ],
                   )),
