@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sky_cast/core/themes/app_themes.dart';
 import 'package:sky_cast/view/home_view.dart';
 import 'package:sky_cast/view/manage_location_view.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage().initStorage;
   runApp(const MyApp());
 }
 
