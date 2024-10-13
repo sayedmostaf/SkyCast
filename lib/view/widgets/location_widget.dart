@@ -1,10 +1,13 @@
 import 'package:flutter/widgets.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
+import 'package:sky_cast/models/forecast_model.dart';
 
 class LocationWidget extends StatelessWidget {
-  const LocationWidget({super.key, required this.currentWeatherModel});
+  const LocationWidget(
+      {super.key, required this.currentWeatherModel, required this.day});
   final CurrentWeatherModel currentWeatherModel;
+  final Day day;
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +52,7 @@ class LocationWidget extends StatelessWidget {
                 "${currentWeatherModel.current!.tempC!.toInt()}˚",
                 style: AppStyles.bodyRegularVeryLarge,
               ),
-              Text("12˚ / 33˚"),
+              Text("${day.maxtempC!.toInt()}˚ / ${day.mintempC!.toInt()}˚"),
             ],
           )
         ],

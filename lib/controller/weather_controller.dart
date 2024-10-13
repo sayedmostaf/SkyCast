@@ -35,11 +35,16 @@ class WeatherController extends GetxController {
     }
   }
 
+  Future<void> refreshWeather() async {
+    await getCurrentWeather(location);
+  }
+
   @override
   void onInit() async {
-    await getCurrentWeather(location);
+    isLoading(true);
     sharedPreferences = await SharedPreferences.getInstance();
     location = sharedPreferences.getString('location') ?? location;
+    await getCurrentWeather(location);
     super.onInit();
   }
 }

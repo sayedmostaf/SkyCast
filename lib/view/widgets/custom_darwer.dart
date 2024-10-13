@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:sky_cast/controller/weather_controller.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
 
-class CustomDarwer extends StatelessWidget {
-  const CustomDarwer(
-      {super.key, required this.controller, this.currentWeatherModel});
-  final WeatherController controller;
+class CustomDrawer extends StatelessWidget {
+  const CustomDrawer(
+      {super.key, required this.isLoading, this.currentWeatherModel});
+  final bool isLoading;
   final CurrentWeatherModel? currentWeatherModel;
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class CustomDarwer extends StatelessWidget {
           horizontal: 15,
           vertical: 50,
         ),
-        child: currentWeatherModel == null
+        child: isLoading
             ? Center(
                 child: Lottie.asset('assets/lotties/loading.json'),
               )

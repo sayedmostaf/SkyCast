@@ -37,6 +37,8 @@ class ManageLocationView extends StatelessWidget {
                             ? Lottie.asset('assets/lotties/search.json')
                             : LocationWidget(
                                 currentWeatherModel: controller.currentWeather!,
+                                day: controller.forecastModel!.forecast!
+                                    .forecastday!.first.day!,
                               ),
                       )
                     ],
