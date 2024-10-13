@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 
-class CustomDarwer extends StatelessWidget {
-  const CustomDarwer(
+class DrawerLocationWidget extends StatelessWidget {
+  const DrawerLocationWidget(
       {super.key,
       this.icon,
       required this.location,
