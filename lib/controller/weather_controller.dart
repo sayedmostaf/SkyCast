@@ -15,6 +15,7 @@ class WeatherController extends GetxController {
   ForecastModel? forecastModel;
   PageController outlookPageController = PageController();
   int currentOutlookPage = 0;
+  
   Future<void> getWeatherData(String location) async {
     isLoading(true);
     var response = await apiService.getRequst(endPoint: '&q=$location');
