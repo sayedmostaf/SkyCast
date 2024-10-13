@@ -3,13 +3,13 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sky_cast/controller/weather_controller.dart';
 import 'package:sky_cast/util/helpers/app_helper.dart';
-import 'package:sky_cast/view/widgets/current_weather.dart';
-import 'package:sky_cast/view/widgets/custom_darwer.dart';
-import 'package:sky_cast/view/widgets/daily_forecast.dart';
-import 'package:sky_cast/view/widgets/double_property_widget.dart';
-import 'package:sky_cast/view/widgets/hourly_forecast.dart';
-import 'package:sky_cast/view/widgets/outlook_widget.dart';
-import 'package:sky_cast/view/widgets/property_widget.dart';
+import 'package:sky_cast/view/widgets/home/current_weather.dart';
+import 'package:sky_cast/view/widgets/drawer/custom_darwer.dart';
+import 'package:sky_cast/view/widgets/home/daily_forecast.dart';
+import 'package:sky_cast/view/widgets/home/double_property_widget.dart';
+import 'package:sky_cast/view/widgets/home/hourly_forecast.dart';
+import 'package:sky_cast/view/widgets/home/outlook_widget.dart';
+import 'package:sky_cast/view/widgets/home/property_widget.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});

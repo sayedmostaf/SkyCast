@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sky_cast/controller/weather_controller.dart';
-import 'package:sky_cast/view/widgets/location_widget.dart';
+import 'package:sky_cast/view/widgets/manage_locations/location_widget.dart';
 
 class ManageLocationView extends StatelessWidget {
   ManageLocationView({super.key});
