@@ -27,7 +27,7 @@ class ManageLocationView extends StatelessWidget {
                         hintText: 'Search location..',
                         trailing: const [Icon(Icons.search)],
                         onSubmitted: (value) =>
-                            controller.getCurrentWeather(value),
+                            controller.getWeatherData(value),
                       ),
                       const SizedBox(
                         height: 20,

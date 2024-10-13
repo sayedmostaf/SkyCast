@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class AppHelper {
   static SnackbarController showSnackbar(
@@ -13,4 +14,37 @@ class AppHelper {
       colorText: Colors.white,
     );
   }
+
+  static String getHumanReadableData(String date) {
+    DateTime inputDate = DateTime.parse(date);
+    DateTime now = DateTime.now();
+    DateTime today = DateTime(now.year, now.month, now.day);
+    DateTime yesterday = today.subtract(const Duration(days: 1));
+    if (inputDate == today) {
+      return 'Today';
+    } else if (inputDate == yesterday) {
+      return 'Yesterday';
+    } else {
+      return DateFormat('EEEE').format(inputDate); // day of week
+    }
+  }
+
+  static String getUVIndexDescription(double uvIndex) {
+    if (uvIndex <= 2) {
+      return 'Low';
+    } else if (uvIndex <= 5) {
+      return 'Moderate';
+    } else if (uvIndex <= 7) {
+      return 'High';
+    } else if (uvIndex <= 10) {
+      return 'Very High';
+    } else {
+      return 'Extreme';
+    }
+  }
+
+  static double screenWidth(BuildContext context) =>
+      MediaQuery.of(context).size.width;
+  static double screenHeight(BuildContext context) =>
+      MediaQuery.of(context).size.height;
 }
