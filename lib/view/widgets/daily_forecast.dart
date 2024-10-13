@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
+import 'package:sky_cast/models/forecast_model.dart';
+import 'package:sky_cast/util/helpers/app_helper.dart';
 
 class DailyForecast extends StatelessWidget {
-  DailyForecast({super.key});
-  final List<String> days = [
-    'Yesterday',
-    'Today',
-    'Monday',
-    'Tuesday',
-    'Wednsday',
-    'Thursday',
-    'Friday'
-  ];
+  const DailyForecast({super.key, required this.forecastday});
+  final List<Forecastday> forecastday;
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 210,
+      height: 230,
       padding: const EdgeInsets.all(13),
       width: double.infinity,
       decoration: BoxDecoration(
@@ -23,14 +17,13 @@ class DailyForecast extends StatelessWidget {
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListView.builder(
-        itemCount: days.length,
-        physics: const NeverScrollableScrollPhysics(),
+        itemCount: forecastday.length,
         itemBuilder: (context, index) => Column(
           children: [
             Row(
               children: [
                 Text(
-                  days[index],
+                  AppHelper.getHumanReadableData(forecastday[index].date!),
                   style: AppStyles.bodyMediumLarge,
                 ),
                 const Spacer(),
@@ -41,12 +34,12 @@ class DailyForecast extends StatelessWidget {
                 const SizedBox(
                   width: 5,
                 ),
-               const Text('3%'),
+                Text('${forecastday[index].day!.dailyChanceOfRain}%'),
                 const SizedBox(
                   width: 40,
                 ),
-               const Text(
-                  '40˚ 27˚',
+                Text(
+                  '${forecastday[index].day!.maxtempC!.toInt()}˚ ${forecastday[index].day!.mintempC!.toInt()}˚',
                   style: AppStyles.bodyMediumLarge,
                 ),
               ],
