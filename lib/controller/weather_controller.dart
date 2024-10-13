@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sky_cast/models/api_response.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
 import 'package:sky_cast/models/forecast_model.dart';
-import 'package:sky_cast/util/helpers/app_helper.dart';
 import 'package:sky_cast/util/services/api_service.dart';
 
 class WeatherController extends GetxController {
@@ -15,29 +15,24 @@ class WeatherController extends GetxController {
   ForecastModel? forecastModel;
   PageController outlookPageController = PageController();
   int currentOutlookPage = 0;
-  
+  late ApiResponse responseState;
+
   Future<void> getWeatherData(String location) async {
     isLoading(true);
     var response = await apiService.getRequst(endPoint: '&q=$location');
 
-    try {
-      if (response != null) {
-        print(response.toString());
-        currentWeather = CurrentWeatherModel.fromJson(response);
-        forecastModel = ForecastModel.fromJson(response);
-        await sharedPreferences.setString('location', location);
-        this.location = location;
-      } else {
-        AppHelper.showSnackbar(title: 'Error', message: 'Incorrect location');
-        return;
-      }
-    } catch (_) {
-      AppHelper.showSnackbar(
-          title: 'Error', message: 'Failed to get location data.');
-    } finally {
-      isLoading(false);
-      update();
+    if (response.isRight()) {
+      responseState = ApiResponse.ok;
+      Map<String, dynamic> jsonResponse = response.getOrElse(() => {});
+      currentWeather = CurrentWeatherModel.fromJson(jsonResponse);
+      forecastModel = ForecastModel.fromJson(jsonResponse);
+      await sharedPreferences.setString('location', location);
+      this.location = location;
+    } else {
+      responseState = response.fold((l) => l, (r) => ApiResponse.unknownError);
     }
+    isLoading(false);
+    update();
   }
 
   Future<void> refreshWeather() async {

@@ -8,6 +8,7 @@ class DailyForecast extends StatelessWidget {
   final List<Forecastday> forecastday;
   @override
   Widget build(BuildContext context) {
+    print("forecast: ${forecastday.length}");
     return Container(
       height: 230,
       padding: const EdgeInsets.all(13),

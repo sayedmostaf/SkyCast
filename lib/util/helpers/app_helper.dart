@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -47,4 +49,13 @@ class AppHelper {
       MediaQuery.of(context).size.width;
   static double screenHeight(BuildContext context) =>
       MediaQuery.of(context).size.height;
+
+  static Future<bool> checkInternet() async {
+    try {
+      var result = await InternetAddress.lookup('google.com');
+      return result.isNotEmpty;
+    } on SocketException catch (_) {
+      return false;
+    }
+  }
 }

@@ -1,9 +1,6 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:path/path.dart';
 import 'package:sky_cast/controller/weather_controller.dart';
 import 'package:sky_cast/util/helpers/app_helper.dart';
 import 'package:sky_cast/view/widgets/current_weather.dart';
@@ -31,7 +28,7 @@ class HomeView extends StatelessWidget {
               child: SafeArea(
                   child: controller.isLoading.value
                       ? Center(
-                          child: Lottie.asset('assets/lotties/loading.json'),
+                          child: Lottie.asset('assets/lotties/offline.json'),
                         )
                       : SingleChildScrollView(
                           child: Padding(
