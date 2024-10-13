@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
+import 'package:sky_cast/core/themes/app_themes.dart';
 import 'package:sky_cast/models/forecast_model.dart';
 
 class HourlyForecast extends StatelessWidget {
@@ -13,7 +14,7 @@ class HourlyForecast extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: const Color(0xC919346B),
+        color: AppThemes.widgetLight,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
