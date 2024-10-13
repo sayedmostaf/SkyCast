@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
+import 'package:sky_cast/util/helpers/app_helper.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer(
@@ -12,6 +13,7 @@ class CustomDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
+      width: AppHelper.screenWidth(context) / 1.2,
       child: SafeArea(
           child: Padding(
         padding: const EdgeInsets.symmetric(
@@ -89,9 +91,14 @@ class CustomDrawer extends StatelessWidget {
                     height: 30,
                   ),
                   MaterialButton(
-                    onPressed: () => Get.toNamed('/manage_location'),
+                    onPressed: () {
+                      Get.back();
+                      Get.toNamed('/manage_location');
+                    },
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 50, vertical: 7),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25),
+                      borderRadius: BorderRadius.circular(20),
                     ),
                     color: const Color(0xFF474646),
                     elevation: 0,
@@ -117,13 +124,17 @@ Widget drawerLocation({
     padding: const EdgeInsets.symmetric(horizontal: 20),
     child: Row(
       children: [
-        Icon(icon),
+        if (icon != null) ...[Icon(icon)],
         const SizedBox(
           width: 10,
         ),
-        Text(
-          location,
-          style: AppStyles.bodyMediumLarge,
+        Expanded(
+          flex: 4,
+          child: Text(
+            location,
+            style: AppStyles.bodyMediumLarge,
+            overflow: TextOverflow.visible,
+          ),
         ),
         const Spacer(),
         if (imageUrl != null)
