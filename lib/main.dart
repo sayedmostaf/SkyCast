@@ -4,6 +4,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:sky_cast/core/themes/app_themes.dart';
 import 'package:sky_cast/view/home_view.dart';
 import 'package:sky_cast/view/manage_location_view.dart';
+import 'package:sky_cast/view/settings_view.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +23,7 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: '/', page: () => HomeView()),
         GetPage(name: '/manage_location', page: () => ManageLocationView()),
+        GetPage(name: '/settings', page: () => const SettingsView()),
       ],
       theme: AppThemes.darkTheme,
     );
