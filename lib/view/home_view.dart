@@ -20,9 +20,9 @@ class HomeView extends StatelessWidget {
       init: WeatherController(),
       builder: (controller) => Scaffold(
         appBar: AppBar(),
-        drawer: Obx(() => CustomDrawer(
-              controller: controller,
-            )),
+        drawer: CustomDrawer(
+          controller: controller,
+        ),
         body: GetBuilder<WeatherController>(
           builder: ((controller) => RefreshIndicator(
                 child: SafeArea(
