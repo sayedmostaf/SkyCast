@@ -66,9 +66,9 @@ class CustomDrawer extends StatelessWidget {
                   DrawerLocationWidget(
                     icon: Icons.location_pin,
                     location: currentWeatherModel!.location!.name!,
-                    imageUrl: currentWeatherModel!.current!.condition!.icon,
+                    imageUrl: currentWeatherModel.current!.condition!.icon,
                     temp:
-                        currentWeatherModel!.current!.tempC!.toInt().toString(),
+                        currentWeatherModel.current!.tempC!.toInt().toString(),
                   ),
                   const SizedBox(
                     height: 10,
@@ -98,10 +98,10 @@ class CustomDrawer extends StatelessWidget {
                     height: 10,
                   ),
                   DrawerLocationWidget(
-                    location: currentWeatherModel!.location!.name!,
+                    location: currentWeatherModel.location!.name!,
                     temp:
-                        currentWeatherModel!.current!.tempC!.toInt().toString(),
-                    imageUrl: currentWeatherModel!.current!.condition!.icon,
+                        currentWeatherModel.current!.tempC!.toInt().toString(),
+                    imageUrl: currentWeatherModel.current!.condition!.icon,
                   ),
                   const SizedBox(
                     height: 30,
