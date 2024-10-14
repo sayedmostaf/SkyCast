@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sky_cast/controller/weather_controller.dart';
+import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/api_response.dart';
 import 'package:sky_cast/view/widgets/search/search_result_widget.dart';
 
@@ -41,12 +42,39 @@ class SearchView extends StatelessWidget {
                       );
                     } else if (controller.searchState.value ==
                         ApiResponse.offline) {
-                      return Lottie.asset('assets/lotties/offline.json');
+                      return Column(
+                        children: [
+                          Lottie.asset('assets/lotties/offline.json'),
+                          Text(
+                            'No internet connection!',
+                            style: AppStyles.bodyRegularVeryLarge
+                                .copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      );
                     } else if (controller.searchState.value ==
                         ApiResponse.loading) {
-                      return Lottie.asset('assets/lotties/loading.json');
+                      return Column(
+                        children: [
+                          Lottie.asset('assets/lotties/loading.json'),
+                          Text(
+                            'Loading...',
+                            style: AppStyles.bodyRegularVeryLarge
+                                .copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      );
                     } else {
-                      return Lottie.asset('assets/lotties/search.json');
+                      return Column(
+                        children: [
+                          Lottie.asset('assets/lotties/search.json'),
+                          Text(
+                            'Enter a location name',
+                            style: AppStyles.bodyRegularVeryLarge
+                                .copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      );
                     }
                   })
                 ],

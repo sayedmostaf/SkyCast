@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
@@ -16,7 +17,7 @@ class LocationWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
       decoration: BoxDecoration(
         color: const Color(0xC919346B),
         borderRadius: BorderRadius.circular(12),
@@ -24,6 +25,13 @@ class LocationWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
+          const Icon(
+            Icons.drag_indicator_outlined,
+            color: Color(0xFFDBDADC),
+          ),
+          const SizedBox(
+            width: 5,
+          ),
           Expanded(
             flex: 4,
             child: Column(

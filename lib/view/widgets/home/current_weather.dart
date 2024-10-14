@@ -30,7 +30,6 @@ class CurrentWeather extends StatelessWidget {
                   style: Theme.of(context).textTheme.displayLarge,
                 ),
                 SizedBox(
-                  height: 150,
                   child: Text(
                     current.condition!.text!,
                     style: AppStyles.bodyMediumLarge,

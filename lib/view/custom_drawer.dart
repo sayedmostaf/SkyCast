@@ -5,6 +5,7 @@ import 'package:sky_cast/controller/weather_controller.dart';
 import 'package:sky_cast/core/config/app_routes.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
+import 'package:sky_cast/models/weather.dart';
 import 'package:sky_cast/util/helpers/app_helper.dart';
 import 'package:sky_cast/view/widgets/drawer/drawer_location_widget.dart';
 
@@ -13,7 +14,9 @@ class CustomDrawer extends StatelessWidget {
   final WeatherController controller;
   @override
   Widget build(BuildContext context) {
-    final CurrentWeatherModel? currentWeatherModel = controller.currentWeather;
+    final CurrentWeatherModel firstCurrentWeather =
+        controller.weathers.first.currentWeatherModel;
+    final RxList<Weather> weathers = controller.weathers;
     return Drawer(
       width: AppHelper.screenWidth(context) / 1.2,
       child: SafeArea(
@@ -44,32 +47,16 @@ class CustomDrawer extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.star_rounded,
-                        size: 25,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Favourite location',
-                        style: AppStyles.bodyMediumMed
-                            .copyWith(color: Colors.grey),
-                      ),
-                    ],
-                  ),
+                  titleRow(Icons.star_rounded, 'Favourite location'),
                   const SizedBox(
                     height: 10,
                   ),
                   DrawerLocationWidget(
                     icon: Icons.location_pin,
-                    location: currentWeatherModel!.location!.name!,
-                    imageUrl: currentWeatherModel.current!.condition!.icon,
+                    location: firstCurrentWeather.location!.name!,
+                    imageUrl: firstCurrentWeather.current!.condition!.icon,
                     temp:
-                        currentWeatherModel.current!.tempC!.toInt().toString(),
+                        firstCurrentWeather.current!.tempC!.toInt().toString(),
                     onTap: () {
                       Get.back();
                       Get.toNamed(AppRoutes.locations);
@@ -82,32 +69,33 @@ class CustomDrawer extends StatelessWidget {
                   const SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.add_location_alt_rounded,
-                        size: 25,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      Text(
-                        'Other locations',
-                        style: AppStyles.bodyMediumLarge
-                            .copyWith(color: Colors.grey),
-                      ),
-                    ],
-                  ),
+                  titleRow(Icons.add_location, 'Other location'),
                   const SizedBox(
                     height: 10,
                   ),
-                  DrawerLocationWidget(
-                    location: currentWeatherModel.location!.name!,
-                    temp:
-                        currentWeatherModel.current!.tempC!.toInt().toString(),
-                    imageUrl: currentWeatherModel.current!.condition!.icon,
-                  ),
+                  Expanded(
+                      child: ListView.builder(
+                          itemCount: controller.weathers.length,
+                          itemBuilder: (context, index) => DrawerLocationWidget(
+                              onTap: () {
+                                Get.back();
+                                Get.toNamed(AppRoutes.settings);
+                              },
+                              imageUrl: weathers[index]
+                                  .currentWeatherModel
+                                  .current!
+                                  .condition!
+                                  .icon,
+                              location: weathers[index]
+                                  .currentWeatherModel
+                                  .location!
+                                  .name!,
+                              temp: weathers[index]
+                                  .currentWeatherModel
+                                  .current!
+                                  .tempC!
+                                  .toInt()
+                                  .toString()))),
                   const SizedBox(
                     height: 30,
                   ),
@@ -131,6 +119,25 @@ class CustomDrawer extends StatelessWidget {
                 ],
               ),
       )),
+    );
+  }
+
+  titleRow(IconData icon, String title) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          size: 25,
+          color: Colors.grey,
+        ),
+        const SizedBox(
+          width: 10,
+        ),
+        Text(
+          title,
+          style: AppStyles.bodyMediumMed.copyWith(color: Colors.grey),
+        ),
+      ],
     );
   }
 }

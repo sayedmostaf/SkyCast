@@ -39,36 +39,48 @@ class HomeView extends StatelessWidget {
                                     height: 20,
                                   ),
                                   CurrentWeather(
-                                    location:
-                                        controller.currentWeather!.location!,
-                                    current:
-                                        controller.currentWeather!.current!,
-                                    day: controller.forecastModel!.forecast!
-                                        .forecastday!.first.day!,
+                                    location: controller.weathers.first
+                                        .currentWeatherModel.location!,
+                                    current: controller.weathers.first
+                                        .currentWeatherModel.current!,
+                                    day: controller.weathers.first.forecastModel
+                                        .forecast!.forecastday!.first.day!,
                                   ),
                                   const SizedBox(
                                     height: 30,
                                   ),
                                   HourlyForecast(
-                                    day: controller.forecastModel!.forecast!
-                                        .forecastday!.first.day!,
-                                    hours: controller.forecastModel!.forecast!
-                                        .forecastday!.first.hour!,
+                                    day: controller.weathers.first.forecastModel
+                                        .forecast!.forecastday!.first.day!,
+                                    hours: controller
+                                        .weathers
+                                        .first
+                                        .forecastModel
+                                        .forecast!
+                                        .forecastday!
+                                        .first
+                                        .hour!,
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   OutlookWidget(
                                     controller: controller,
-                                    astro: controller.forecastModel!.forecast!
-                                        .forecastday!.first.astro!,
+                                    astro: controller
+                                        .weathers
+                                        .first
+                                        .forecastModel
+                                        .forecast!
+                                        .forecastday!
+                                        .first
+                                        .astro!,
                                   ),
                                   const SizedBox(
                                     height: 10,
                                   ),
                                   DailyForecast(
-                                    forecastday: controller
-                                        .forecastModel!.forecast!.forecastday!,
+                                    forecastday: controller.weathers.first
+                                        .forecastModel.forecast!.forecastday!,
                                   ),
                                   const SizedBox(
                                     height: 10,
@@ -78,8 +90,8 @@ class HomeView extends StatelessWidget {
                                       PropertyWidget(
                                         name: 'UV index',
                                         value: AppHelper.getUVIndexDescription(
-                                          controller
-                                              .currentWeather!.current!.uv!,
+                                          controller.weathers.first
+                                              .currentWeatherModel.current!.uv!,
                                         ),
                                         photo: 'uv.svg',
                                       ),
@@ -89,7 +101,7 @@ class HomeView extends StatelessWidget {
                                       PropertyWidget(
                                         name: 'Humidity',
                                         value:
-                                            "${controller.currentWeather!.current!.humidity}%",
+                                            "${controller.weathers.first.currentWeatherModel.current!.humidity}%",
                                         photo: 'water.svg',
                                       ),
                                     ],
@@ -102,7 +114,7 @@ class HomeView extends StatelessWidget {
                                       PropertyWidget(
                                         name: 'Wind',
                                         value:
-                                            "${controller.currentWeather!.current!.windKph!.toInt()} km/h",
+                                            "${controller.weathers.first.currentWeatherModel.current!.windKph!.toInt()} km/h",
                                         photo: 'wind.svg',
                                       ),
                                       const SizedBox(
@@ -114,14 +126,18 @@ class HomeView extends StatelessWidget {
                                         name1: 'Sunrise',
                                         name2: 'Sunset',
                                         value1: controller
-                                            .forecastModel!
+                                            .weathers
+                                            .first
+                                            .forecastModel
                                             .forecast!
                                             .forecastday!
                                             .first
                                             .astro!
                                             .sunrise!,
                                         value2: controller
-                                            .forecastModel!
+                                            .weathers
+                                            .first
+                                            .forecastModel
                                             .forecast!
                                             .forecastday!
                                             .first
