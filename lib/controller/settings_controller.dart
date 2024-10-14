@@ -8,11 +8,7 @@ class SettingsController extends GetxController {
   Duration refreshTime = const Duration(hours: 1);
 
   void setUnit(String unit) {
-    if (unit == 'C') {
-      this.unit = 'C';
-    } else {
-      this.unit = 'F';
-    }
+    this.unit = unit;
     box.write('unit', unit);
     update();
   }

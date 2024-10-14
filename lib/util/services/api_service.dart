@@ -6,9 +6,14 @@ import 'package:sky_cast/models/api_response.dart';
 import 'package:sky_cast/util/helpers/app_helper.dart';
 
 class ApiService {
-  Future<Either<ApiResponse, Map<String, dynamic>>> getRequst(
-      {required String endPoint}) async {
+  Future<Either<ApiResponse, dynamic>> getRequst({
+    required String endPoint,
+    bool isSearch = false,
+  }) async {
     String fullUrl = AppConfig.baseUrl + endPoint;
+    if (isSearch) {
+      fullUrl = AppConfig.searchUrl + endPoint;
+    }
     bool isOnline = await AppHelper.checkInternet();
 
     try {
