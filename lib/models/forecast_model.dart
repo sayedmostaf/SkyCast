@@ -1,4 +1,3 @@
-
 class ForecastModel {
   Forecast? forecast;
   ForecastModel.fromJson(Map<String, dynamic> json) {

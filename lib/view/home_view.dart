@@ -39,8 +39,10 @@ class HomeView extends StatelessWidget {
                                     height: 20,
                                   ),
                                   CurrentWeather(
-                                    currentWeatherModel:
-                                        controller.currentWeather!,
+                                    location:
+                                        controller.currentWeather!.location!,
+                                    current:
+                                        controller.currentWeather!.current!,
                                     day: controller.forecastModel!.forecast!
                                         .forecastday!.first.day!,
                                   ),
