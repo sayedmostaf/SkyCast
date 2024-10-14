@@ -7,11 +7,13 @@ class DrawerLocationWidget extends StatelessWidget {
       this.icon,
       required this.location,
       this.imageUrl,
-      required this.temp});
+      required this.temp,
+      this.onTap});
   final IconData? icon;
   final String location;
   final String? imageUrl;
   final String temp;
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +22,7 @@ class DrawerLocationWidget extends StatelessWidget {
       color: Colors.transparent,
       borderRadius: BorderRadius.circular(10),
       child: InkWell(
-        onTap: () {},
+        onTap: onTap,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
           child: Row(

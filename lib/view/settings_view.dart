@@ -58,7 +58,7 @@ class SettingsView extends StatelessWidget {
                     PopupSettingsMenuItem(
                       isBottom: true,
                       property: 'Auto Refresh',
-                      value: 'Every ${controller.refreshTime.inHours} hour',
+                      value: 'Every ${controller.refreshTime.inHours} hours',
                       options: (context) => [
                         const PopupMenuItem(
                           child: Text("Never"),
@@ -76,11 +76,11 @@ class SettingsView extends StatelessWidget {
                           child: const Text('Every 6 hour'),
                         ),
                         PopupMenuItem(
-                          onTap: ()=>controller.setRefreshTime(12),
+                          onTap: () => controller.setRefreshTime(12),
                           child: const Text('Every 12 hour'),
                         ),
                         PopupMenuItem(
-                          onTap: ()=>controller.setRefreshTime(24),
+                          onTap: () => controller.setRefreshTime(24),
                           child: const Text('Every 24 hour'),
                         ),
                       ],

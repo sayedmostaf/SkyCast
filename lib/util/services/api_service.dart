@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:dartz/dartz.dart';
-import 'package:sky_cast/core/app_config.dart';
+import 'package:sky_cast/core/config/app_config.dart';
 import 'package:http/http.dart' as http;
 import 'package:sky_cast/models/api_response.dart';
 import 'package:sky_cast/util/helpers/app_helper.dart';
