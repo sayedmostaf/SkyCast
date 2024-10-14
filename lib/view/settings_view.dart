@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:sky_cast/view/widgets/settings/settings_menu_widget.dart';
+import 'package:sky_cast/view/widgets/settings/popup_settings_menu_item.dart';
 
 class SettingsView extends StatelessWidget {
   const SettingsView({super.key});
@@ -8,33 +7,85 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        titleTextStyle:
+            const TextStyle(fontWeight: FontWeight.w500, fontSize: 24),
+        title: const Text('Weather settings'),
+      ),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(10),
+          padding: const EdgeInsets.only(top: 10),
           child: SingleChildScrollView(
-            child: Column(
-              children: [
-                PopupMenuButton(
-                  itemBuilder: (context) => [
-                    const PopupMenuItem(
-                      padding: EdgeInsets.zero,
-                      child: Text("C˚"),
-                    ),
-                    const PopupMenuItem(
-                      child: Text("F˚"),
-                    ),
-                  ],
-                  child: const SettingsMenuWidget(
-                    property: 'Units',
-                    value: 'C˚',
+            child: Container(
+              decoration: BoxDecoration(
+                color: const Color(0xFF212121),
+                borderRadius: BorderRadius.circular(15),
+              ),
+              child: Column(
+                children: [
+                  PopupSettingsMenuItem(
+                    isTop: true,
+                    property: 'Unit',
+                    value: '˚C',
+                    options: (context) => const [
+                      PopupMenuItem(
+                        child: Text('C˚'),
+                      ),
+                      PopupMenuItem(
+                        child: Text('F˚'),
+                      ),
+                    ],
                   ),
-                )
-              ],
+                  customDivider(),
+                  PopupSettingsMenuItem(
+                    property: 'Local Weather',
+                    value: 'Agree',
+                    options: (context) => const [
+                      PopupMenuItem(
+                        child: Text('Agree'),
+                      ),
+                      PopupMenuItem(
+                        child: Text('Disagree'),
+                      ),
+                    ],
+                  ),
+                  customDivider(),
+                  PopupSettingsMenuItem(
+                    isBottom: true,
+                    property: 'Auto Refresh',
+                    value: 'Every Hour',
+                    options: (context) => const [
+                      PopupMenuItem(
+                        child: Text("Never"),
+                      ),
+                      PopupMenuItem(
+                        child: Text('Every 3 hour'),
+                      ),
+                      PopupMenuItem(
+                        child: Text('Every 6 hour'),
+                      ),
+                      PopupMenuItem(
+                        child: Text('Every 12 hour'),
+                      ),
+                      PopupMenuItem(
+                        child: Text('Every 24 hour'),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Divider customDivider() {
+    return const Divider(
+      height: 0,
+      indent: 15,
+      endIndent: 15,
     );
   }
 }
