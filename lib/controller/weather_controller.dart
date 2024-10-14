@@ -1,7 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:sky_cast/controller/settings_controller.dart';
 import 'package:sky_cast/core/themes/app_themes.dart';
 import 'package:sky_cast/models/api_response.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
@@ -19,6 +22,8 @@ class WeatherController extends GetxController {
   int currentOutlookPage = 0;
   Color? backgroundColor;
   late ApiResponse responseState;
+  SettingsController settingsController = Get.find<SettingsController>();
+  Timer? timer;
 
   Future<void> getWeatherData(String location) async {
     isLoading(true);
@@ -56,11 +61,21 @@ class WeatherController extends GetxController {
     }
   }
 
+  void autoRefresh() {
+    if (settingsController.refreshTime.inHours != 0) {
+      timer = Timer.periodic(
+        settingsController.refreshTime,
+        (t) => refreshWeather(),
+      );
+    }
+  }
+
   @override
   void onInit() async {
     isLoading(true);
     location = box.read('location') ?? location;
     await getWeatherData(location);
+    autoRefresh();
     super.onInit();
   }
 }
