@@ -5,7 +5,7 @@ import 'package:sky_cast/core/config/app_routes.dart';
 import 'package:sky_cast/core/themes/app_themes.dart';
 import 'package:sky_cast/util/services/app_bindings.dart';
 import 'package:sky_cast/view/home_view.dart';
-import 'package:sky_cast/view/manage_location_view.dart';
+import 'package:sky_cast/view/locations_view.dart';
 import 'package:sky_cast/view/settings_view.dart';
 
 void main() async {

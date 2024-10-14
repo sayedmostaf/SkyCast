@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:sky_cast/view/home_view.dart';
-import 'package:sky_cast/view/manage_location_view.dart';
+import 'package:sky_cast/view/locations_view.dart';
 import 'package:sky_cast/view/search_view.dart';
 import 'package:sky_cast/view/settings_view.dart';
 
@@ -16,7 +16,7 @@ class AppRoutes {
     ),
     GetPage(
       name: locations,
-      page: () => ManageLocationView(),
+      page: () => LocationsView(),
     ),
     GetPage(
       name: settings,
