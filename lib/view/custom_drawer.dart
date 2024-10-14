@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sky_cast/controller/weather_controller.dart';
+import 'package:sky_cast/core/config/app_routes.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/models/current_weather_model.dart';
 import 'package:sky_cast/util/helpers/app_helper.dart';
@@ -35,7 +36,7 @@ class CustomDrawer extends StatelessWidget {
                       alignment: Alignment.topRight,
                       onPressed: () {
                         Get.back();
-                        Get.toNamed('/settings');
+                        Get.toNamed(AppRoutes.settings);
                       },
                       icon: const Icon(Icons.settings),
                     ),
@@ -69,6 +70,10 @@ class CustomDrawer extends StatelessWidget {
                     imageUrl: currentWeatherModel.current!.condition!.icon,
                     temp:
                         currentWeatherModel.current!.tempC!.toInt().toString(),
+                    onTap: () {
+                      Get.back();
+                      Get.toNamed(AppRoutes.locations);
+                    },
                   ),
                   const SizedBox(
                     height: 10,
@@ -109,7 +114,7 @@ class CustomDrawer extends StatelessWidget {
                   MaterialButton(
                     onPressed: () {
                       Get.back();
-                      Get.toNamed('/manage_location');
+                      Get.toNamed(AppRoutes.locations);
                     },
                     padding:
                         const EdgeInsets.symmetric(horizontal: 50, vertical: 7),
