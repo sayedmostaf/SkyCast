@@ -17,17 +17,35 @@ class AppHelper {
     );
   }
 
+  // static String getHumanReadableData(String date) {
+  //   DateTime inputDate = DateTime.parse(date);
+  //   DateTime now = DateTime.now();
+  //   DateTime today = DateTime(now.year, now.month, now.day);
+  //   DateTime yesterday = today.subtract(const Duration(days: 1));
+  //   if (inputDate == today) {
+  //     return 'Today';
+  //   } else if (inputDate == yesterday) {
+  //     return 'Yesterday';
+  //   } else {
+  //     return DateFormat('EEEE').format(inputDate); // day of week
+  //   }
+  // }
   static String getHumanReadableData(String date) {
-    DateTime inputDate = DateTime.parse(date);
-    DateTime now = DateTime.now();
-    DateTime today = DateTime(now.year, now.month, now.day);
-    DateTime yesterday = today.subtract(const Duration(days: 1));
-    if (inputDate == today) {
-      return 'Today';
-    } else if (inputDate == yesterday) {
-      return 'Yesterday';
-    } else {
-      return DateFormat('EEEE').format(inputDate); // day of week
+    try {
+      DateTime inputDate = DateTime.parse(date);
+      DateTime now = DateTime.now();
+      DateTime today = DateTime(now.year, now.month, now.day);
+      DateTime yesterday = today.subtract(const Duration(days: 1));
+
+      if (inputDate.isAtSameMomentAs(today)) {
+        return 'Today';
+      } else if (inputDate.isAtSameMomentAs(yesterday)) {
+        return 'Yesterday';
+      } else {
+        return DateFormat('EEEE').format(inputDate); // day of week
+      }
+    } catch (e) {
+      return 'Invalid date';
     }
   }
 

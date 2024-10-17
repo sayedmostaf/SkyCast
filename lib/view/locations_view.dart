@@ -55,16 +55,10 @@ class LocationsView extends StatelessWidget {
                                         ),
                                       LocationWidget(
                                         key: Key(index.toString()),
-                                        currentWeatherModel: controller
-                                            .weathers[index]
-                                            .currentWeatherModel,
-                                        day: controller
-                                            .weathers[index]
-                                            .forecastModel
-                                            .forecast!
-                                            .forecastday!
-                                            .first
-                                            .day!,
+                                        weather:
+                                      controller.weathers[index],
+                                  day: controller.weathers[index].forecast!
+                                      .forecastday!.first.day!,
                                       ),
                                       SizedBox(
                                         height: 10,

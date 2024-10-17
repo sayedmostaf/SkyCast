@@ -2,16 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 
 class PopupSettingsMenuItem extends StatelessWidget {
-  const PopupSettingsMenuItem(
-      {super.key,
-      required this.property,
-      required this.value,
-      required this.options,
-      this.isTop,
-      this.isBottom});
-  final String property, value;
+  const PopupSettingsMenuItem({
+    super.key,
+    required this.property,
+    required this.value,
+    required this.options,
+    this.isTop,
+    this.isBottom,
+  });
+  final String property;
+  final String value;
   final List<PopupMenuEntry<dynamic>> Function(BuildContext) options;
-  final bool? isTop, isBottom;
+  final bool? isTop;
+  final bool? isBottom;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -23,10 +27,10 @@ class PopupSettingsMenuItem extends StatelessWidget {
       ),
       child: PopupMenuButton(
         color: const Color(0xFF373737),
-        itemBuilder: options,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
+        itemBuilder: options,
         child: Container(
           width: double.infinity,
           padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),

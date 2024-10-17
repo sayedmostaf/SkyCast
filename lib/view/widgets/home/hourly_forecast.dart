@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:sky_cast/controller/settings_controller.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
 import 'package:sky_cast/core/themes/app_themes.dart';
-import 'package:sky_cast/models/forecast_model.dart';
+import 'package:sky_cast/models/weather.dart';
 
 class HourlyForecast extends StatelessWidget {
   const HourlyForecast({super.key, required this.day, required this.hours});

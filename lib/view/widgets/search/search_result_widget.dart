@@ -26,7 +26,8 @@ class SearchResultWidget extends StatelessWidget {
         physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemBuilder: (context, index) => InkWell(
-          onTap: () => controller.selectLocation(searchedLocation[index].name!),
+          onTap: () => controller.selectLocation(
+              "${searchedLocation[index].name} ${searchedLocation[index].region}"),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

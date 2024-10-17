@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 
 class SettingsController extends GetxController {
-  final RxBool isDarkTheme = true.obs;
+  bool isDarkTheme = true;
   GetStorage box = GetStorage();
   String unit = 'C';
   Duration refreshTime = const Duration(hours: 1);
@@ -17,6 +18,15 @@ class SettingsController extends GetxController {
     refreshTime = Duration(hours: hours);
     box.write('refreshTime', hours);
     update();
+  }
+
+  void switchTheme(bool value) {
+    isDarkTheme = value;
+    if (value) {
+      Get.changeThemeMode(ThemeMode.dark);
+    } else {
+      Get.changeThemeMode(ThemeMode.light);
+    }
   }
 
   void updateDate() {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sky_cast/controller/settings_controller.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
-import 'package:sky_cast/models/forecast_model.dart';
+import 'package:sky_cast/models/weather.dart';
 import 'package:sky_cast/util/helpers/app_helper.dart';
 
 class DailyForecast extends StatelessWidget {

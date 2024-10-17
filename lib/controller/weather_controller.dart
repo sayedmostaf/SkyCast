@@ -7,8 +7,6 @@ import 'package:sky_cast/controller/settings_controller.dart';
 import 'package:sky_cast/core/config/app_routes.dart';
 import 'package:sky_cast/core/themes/app_themes.dart';
 import 'package:sky_cast/models/api_response.dart';
-import 'package:sky_cast/models/current_weather_model.dart';
-import 'package:sky_cast/models/forecast_model.dart';
 import 'package:sky_cast/models/search_location.dart';
 import 'package:sky_cast/models/weather.dart';
 import 'package:sky_cast/util/services/api_service.dart';
@@ -35,16 +33,21 @@ class WeatherController extends GetxController {
     if (response.isRight()) {
       responseState = ApiResponse.ok;
       Map<String, dynamic> jsonResponse = response.getOrElse(() => {});
-      weathers.add(Weather(
-          currentWeatherModel: CurrentWeatherModel.fromJson(jsonResponse),
-          forecastModel: ForecastModel.fromJson(jsonResponse)));
-      box.write('location', location);
+      weathers.add(Weather.fromJson(jsonResponse));
+      saveWeatherData(location, weathers);
       this.location = location;
     } else {
       responseState = response.fold((l) => l, (r) => ApiResponse.unknownError);
     }
     isLoading(false);
     update();
+  }
+
+  void saveWeatherData(String location, List<Weather> weathers) {
+    box.write('location', location);
+    List<Map<String, dynamic>> weatherList =
+        weathers.map((weather) => weather.toJson()).toList();
+    box.write('weathers', weatherList);
   }
 
   void searchLocation(String query) async {
@@ -77,9 +80,9 @@ class WeatherController extends GetxController {
   }
 
   Future<void> refreshWeather() async {
-    final String loc = weathers.first.currentWeatherModel.location!.name!;
-
-    await getWeatherData(location);
+    final String name = weathers.first.location!.name!;
+    final String region = weathers.first.location!.region!;
+    await getWeatherData("$name $region");
     weathers.first = weathers.last;
     weathers.removeLast();
     updateBackgroundColor();
@@ -92,7 +95,7 @@ class WeatherController extends GetxController {
   }
 
   void updateBackgroundColor() {
-    if (weathers.first.currentWeatherModel.current!.isDay == 1) {
+    if (weathers.first.current!.isDay == 1) {
       backgroundColor = AppThemes.dayBackground;
     } else {
       backgroundColor = AppThemes.nightBackground;
@@ -117,9 +120,16 @@ class WeatherController extends GetxController {
   void onInit() async {
     isLoading(true);
     location = box.read('location') ?? location;
-    await getWeatherData(location);
+    List<dynamic>? savedWeatherList = box.read<List<dynamic>>('weathers');
+    if (savedWeatherList != null) {
+      weathers.value =
+          savedWeatherList.map((json) => Weather.fromJson(json)).toList();
+    } else {
+      await getWeatherData(location);
+    }
     updateBackgroundColor();
     timer = Timer.periodic(settingsController.refreshTime, (t) => autoRefresh);
+    isLoading(false);
     super.onInit();
   }
 }
