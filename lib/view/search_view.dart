@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sky_cast/controller/weather_controller.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
-import 'package:sky_cast/models/api_response.dart';
+import 'package:sky_cast/models/enums.dart';
 import 'package:sky_cast/view/widgets/search/search_result_widget.dart';
 
 class SearchView extends StatelessWidget {

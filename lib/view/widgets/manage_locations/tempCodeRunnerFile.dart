@@ -1,1 +1,0 @@
-'${AppHelper.getHumanReadableData(weather.location!.localtime!.split(' ').first)}, ${AppHelper.getHumanReadableData(weather.location!.localtime!.split(' ').last)}',

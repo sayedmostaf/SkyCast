@@ -13,8 +13,12 @@ class CustomDrawer extends StatelessWidget {
   final WeatherController controller;
   @override
   Widget build(BuildContext context) {
-    final Weather firstWeather = controller.weathers.first;
-    final List<Weather> tempWeathers = controller.weathers.sublist(1);
+    late final Weather firstWeather;
+    late final List<Weather> tempWeathers;
+    if (controller.weathers.isNotEmpty) {
+      firstWeather = controller.weathers.first;
+      tempWeathers = controller.weathers.sublist(1);
+    }
     return Drawer(
       width: AppHelper.screenWidth(context) / 1.2,
       child: SafeArea(
@@ -23,7 +27,7 @@ class CustomDrawer extends StatelessWidget {
           horizontal: 15,
           vertical: 50,
         ),
-        child: controller.isLoading.value
+        child: controller.isLoading.value || controller.weathers.isEmpty
             ? Center(
                 child: Lottie.asset('assets/lotties/loading.json'),
               )
@@ -72,22 +76,24 @@ class CustomDrawer extends StatelessWidget {
                     height: 10,
                   ),
                   Expanded(
-                      child: ListView.builder(
-                          itemCount: tempWeathers.length,
-                          itemBuilder: (context, index) => DrawerLocationWidget(
-                              onTap: () {
-                                controller.onReorder(index + 1, 0);
-                                Get.back();
-                                Get.toNamed(AppRoutes.home);
-                              },
-                              imageUrl:
-                                  tempWeathers[index].current!.condition!.icon,
-                              location: tempWeathers[index].location!.name!,
-                              temp: tempWeathers[index]
-                                  .current!
-                                  .tempC!
-                                  .toInt()
-                                  .toString()))),
+                    child: ListView.builder(
+                      itemCount: tempWeathers.length,
+                      itemBuilder: (context, index) => DrawerLocationWidget(
+                        onTap: () {
+                          controller.onReorder(index + 1, 0);
+                          Get.back();
+                          Get.toNamed(AppRoutes.home);
+                        },
+                        imageUrl: tempWeathers[index].current!.condition!.icon,
+                        location: tempWeathers[index].location!.name!,
+                        temp: tempWeathers[index]
+                            .current!
+                            .tempC!
+                            .toInt()
+                            .toString(),
+                      ),
+                    ),
+                  ),
                   const SizedBox(
                     height: 30,
                   ),

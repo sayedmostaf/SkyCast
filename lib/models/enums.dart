@@ -6,3 +6,9 @@ enum ApiResponse {
   serverError,
   unknownError,
 }
+
+enum LocationError {
+  notEnabled,
+  denied,
+  offline,
+}

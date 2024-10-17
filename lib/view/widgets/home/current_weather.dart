@@ -18,7 +18,7 @@ class CurrentWeather extends StatelessWidget {
     return GetBuilder<SettingsController>(
       builder: (controller) => Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Expanded(
             child: Column(
@@ -69,9 +69,14 @@ class CurrentWeather extends StatelessWidget {
               ],
             ),
           ),
-          Image.network(
-            "https:${current.condition!.icon}".replaceAll('64x64', '128x128'),
-            scale: .7,
+          Expanded(
+            child: Image.network(
+              "https:${current.condition!.icon}".replaceAll('64x64', '128x128'),
+              errorBuilder: (context, error, stackTrace) => const Center(
+                child: Text('No internet connection!\n Please try again'),
+              ),
+              scale: .7,
+            ),
           ),
         ],
       ),
