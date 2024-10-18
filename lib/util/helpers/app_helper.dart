@@ -1,9 +1,10 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sky_cast/core/themes/app_styles.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+
 
 class AppHelper {
   static SnackbarController showSnackbar(
@@ -18,19 +19,6 @@ class AppHelper {
     );
   }
 
-  // static String getHumanReadableData(String date) {
-  //   DateTime inputDate = DateTime.parse(date);
-  //   DateTime now = DateTime.now();
-  //   DateTime today = DateTime(now.year, now.month, now.day);
-  //   DateTime yesterday = today.subtract(const Duration(days: 1));
-  //   if (inputDate == today) {
-  //     return 'Today';
-  //   } else if (inputDate == yesterday) {
-  //     return 'Yesterday';
-  //   } else {
-  //     return DateFormat('EEEE').format(inputDate); // day of week
-  //   }
-  // }
   static String getHumanReadableData(String date) {
     try {
       DateTime inputDate = DateTime.parse(date);
@@ -140,11 +128,20 @@ class AppHelper {
       required void Function()? confirmFunction}) {
     return AppHelper.showDialog(
       title: "Location services denied",
-      message: "Make sure to allow location access for this app from app settings.",
+      message:
+          "Make sure to allow location access for this app from app settings.",
       cancelButtonText: "Discard",
       confirmButtonText: "Allow",
       onPressCancel: cancelFunction,
       onPressConfirm: confirmFunction,
+    );
+  }
+  
+
+  static Future<void> showToast(String message) {
+    return Fluttertoast.showToast(
+      msg: message,
+      backgroundColor: Colors.black87,
     );
   }
 }

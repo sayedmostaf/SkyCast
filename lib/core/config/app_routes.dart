@@ -16,7 +16,7 @@ class AppRoutes {
     ),
     GetPage(
       name: locations,
-      page: () => LocationsView(),
+      page: () => const LocationsView(),
     ),
     GetPage(
       name: settings,

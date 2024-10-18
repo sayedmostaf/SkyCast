@@ -31,6 +31,7 @@ class WeatherController extends GetxController {
   RxList<Weather> weathers = <Weather>[].obs;
   RxList<SearchLocation> searchLocations = <SearchLocation>[].obs;
   int refreshCounter = 0;
+  List<int> selectedLocations = <int>[];
 
   Future<void> getWeatherData(String query, {bool newLocation = false}) async {
     isLoading(true);
@@ -46,17 +47,11 @@ class WeatherController extends GetxController {
     } else {
       responseState = response.fold((l) => l, (r) => ApiResponse.unknownError);
       if (responseState == ApiResponse.offline) {
-        await AppHelper.showOfflineDialog(
-            cancelFunction: Get.back,
-            confirmFunction: () async {
-              Get.back();
-              await Future.delayed(const Duration(seconds: 2));
-              await getWeatherData(query);
-            });
+        await handleGetWeatherError(responseState);
       }
+      isLoading(false);
+      update();
     }
-    isLoading(false);
-    update();
   }
 
   void saveWeatherData(String location, List<Weather> weathers) {
@@ -108,28 +103,21 @@ class WeatherController extends GetxController {
   }
 
   Future<void> refreshWeather() async {
-    if (refreshCounter < 3) {
-      await getWeatherData(location);
-      refreshCounter++;
-    } else {
-      await getUserLocation();
-      refreshCounter = 0;
-    }
+    final String favLocation =
+        "${weathers.first.location!.name},${weathers.first.location!.region}";
+    await getWeatherData(favLocation);
+
     updateBackgroundColor();
     update();
   }
 
   void updateWeathersList({bool newLocation = false}) {
-    if (newLocation) {
-      if (weathers.length > 1) {
-        weathers.insert(0, weathers.last);
-        weathers.removeLast();
-      }
+    if (weathers.length > 1) {
+      weathers.insert(0, weathers.last);
+      weathers.removeLast();
     } else {
-      if (weathers.length > 1) {
-        weathers.first = weathers.last;
-        weathers.removeLast();
-      }
+      weathers.first = weathers.last;
+      weathers.removeLast();
     }
   }
 
@@ -152,11 +140,6 @@ class WeatherController extends GetxController {
     }
   }
 
-  void onOutlookPageChange(index) {
-    currentOutlookPage = index;
-    update();
-  }
-
   void updateBackgroundColor() {
     if (weathers.first.current!.isDay == 1) {
       backgroundColor = AppThemes.dayBackground;
@@ -165,18 +148,64 @@ class WeatherController extends GetxController {
     }
   }
 
-  void autoRefresh() {
+  void autoRefresh() async {
     if (settingsController.refreshTime.inHours != 0) {
-      refreshWeather();
+      await refreshWeather();
     }
   }
 
-  void onReorder(int oldIndex, int newIndex) {
+  Future<void> handleGetWeatherError(ApiResponse error) async {
+    if (error == ApiResponse.offline) {
+      AppHelper.showToast('No network connection');
+    } else if (error == ApiResponse.wrongLocation) {
+      AppHelper.showToast('Wrong location');
+    } else if (error == ApiResponse.serverError) {
+      AppHelper.showToast('Server error, please try again later');
+    } else {
+      AppHelper.showToast('Unknown error occurred.');
+    }
+  }
+
+  void onOutlookPageChange(index) {
+    currentOutlookPage = index;
+    update();
+  }
+
+  void onReorder(int oldIndex, int newIndex) async {
     if (oldIndex < newIndex) newIndex--;
     final Weather tempWeather = weathers.removeAt(oldIndex);
     weathers.insert(newIndex, tempWeather);
-    refreshWeather();
+    await refreshWeather();
+  }
+
+  onlongPressLocation(int index) {
+    if (!selectedLocations.contains(index)) {
+      selectedLocations.add(index);
+    }
     update();
+  }
+
+  onTapLocation(int index) {
+    if (selectedLocations.contains(index)) {
+      selectedLocations.removeWhere((item) => item == index);
+    }
+    update();
+  }
+
+  void deleteLocation() async {
+    if (selectedLocations.isNotEmpty) {
+      if (selectedLocations.contains(0)) {
+        await AppHelper.showToast("Can't delete favourite location");
+      } else {
+        // final int count = selectedLocations.length;
+        selectedLocations.forEach(weathers.removeAt);
+        selectedLocations.clear();
+        saveWeatherData(location, weathers);
+        update();
+      }
+    } else {
+      await AppHelper.showToast("Select location to delete");
+    }
   }
 
   @override
@@ -188,9 +217,9 @@ class WeatherController extends GetxController {
     if (savedWeatherList != null) {
       weathers.value =
           savedWeatherList.map((json) => Weather.fromJson(json)).toList();
-    } else {
-      await getUserLocation();
     }
+    await getUserLocation();
+    updateBackgroundColor();
     timer = Timer.periodic(settingsController.refreshTime, (t) => autoRefresh);
     isLoading(false);
     super.onInit();

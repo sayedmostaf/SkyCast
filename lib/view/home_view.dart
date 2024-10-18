@@ -66,7 +66,6 @@ class HomeView extends StatelessWidget {
                                     height: 10,
                                   ),
                                   DailyForecast(
-                                    
                                     forecastday: controller
                                         .weathers.first.forecast!.forecastday!,
                                   ),
