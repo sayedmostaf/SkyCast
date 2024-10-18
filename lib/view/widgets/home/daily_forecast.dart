@@ -12,7 +12,7 @@ class DailyForecast extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<SettingsController>(
       builder: (controller) => Container(
-        height: 230,
+        
         padding: const EdgeInsets.all(13),
         width: double.infinity,
         decoration: BoxDecoration(
@@ -20,6 +20,8 @@ class DailyForecast extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         child: ListView.builder(
+          physics: const NeverScrollableScrollPhysics(),
+          shrinkWrap: true,
           itemCount: forecastday.length,
           itemBuilder: (context, index) => Column(
             mainAxisSize: MainAxisSize.min,
