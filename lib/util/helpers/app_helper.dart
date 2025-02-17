@@ -138,7 +138,7 @@ class AppHelper {
   }
   
 
-  static Future<void> showToast(String message) {
+  static Future<bool?> showToast(String message) {
     return Fluttertoast.showToast(
       msg: message,
       backgroundColor: Colors.black87,

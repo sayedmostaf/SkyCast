@@ -40,7 +40,7 @@ class OutlookWidget extends StatelessWidget {
                   height: 7,
                   margin: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
-                    color: controller.currentOutlookPage == index
+                    color: controller.currOutlookPage == index
                         ? Colors.white
                         : Colors.grey,
                     borderRadius: BorderRadius.circular(10),

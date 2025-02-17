@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:location/location.dart';
@@ -16,42 +15,40 @@ import 'package:sky_cast/util/services/api_service.dart';
 import 'package:sky_cast/util/services/location_service.dart';
 
 class WeatherController extends GetxController {
-  final ApiService apiService = ApiService();
+  final ApiService apiServices = ApiService();
   final LocationService locationServices = LocationService();
   final GetStorage box = GetStorage();
-  String location = 'Paris';
+  String location = "Paris";
   RxBool isLoading = false.obs;
-  PageController outlookPageController = PageController();
-  int currentOutlookPage = 0;
+  int currOutlookPage = 0;
+  late ApiResponse responseStatus;
+  Rx<ApiResponse> searchStatus = ApiResponse.unknownError.obs;
   Color? backgroundColor;
-  late ApiResponse responseState;
-  Rx<ApiResponse> searchState = ApiResponse.unknownError.obs;
   SettingsController settingsController = Get.find<SettingsController>();
   Timer? timer;
   RxList<Weather> weathers = <Weather>[].obs;
-  RxList<SearchLocation> searchLocations = <SearchLocation>[].obs;
-  int refreshCounter = 0;
+  RxList<SearchLocation> searchedLocations = <SearchLocation>[].obs;
   List<int> selectedLocations = <int>[];
 
-  Future<void> getWeatherData(String query, {bool newLocation = false}) async {
+  Future<void> getWeatherData(String query, {bool newLoc = false}) async {
     isLoading(true);
-    var response = await apiService.getRequst(endPoint: '&q=$query');
+    var response = await apiServices.getRequst(endPoint: "&q=$query");
 
     if (response.isRight()) {
-      responseState = ApiResponse.ok;
+      //On Success
+      responseStatus = ApiResponse.ok;
       Map<String, dynamic> jsonResponse = response.getOrElse(() => {});
       weathers.add(Weather.fromJson(jsonResponse));
-      updateWeathersList(newLocation: newLocation);
+      _updateWeathersList(newLoc: newLoc);
       saveWeatherData(query, weathers);
       location = query;
     } else {
-      responseState = response.fold((l) => l, (r) => ApiResponse.unknownError);
-      if (responseState == ApiResponse.offline) {
-        await handleGetWeatherError(responseState);
-      }
-      isLoading(false);
-      update();
+      //On Error
+      responseStatus = response.fold((l) => l, (r) => ApiResponse.unknownError);
+      await _handelGetWeatherError(responseStatus);
     }
+    isLoading(false);
+    update();
   }
 
   void saveWeatherData(String location, List<Weather> weathers) {
@@ -62,28 +59,31 @@ class WeatherController extends GetxController {
   }
 
   void searchLocation(String query) async {
-    searchState(ApiResponse.loading);
+    searchStatus(ApiResponse.loading);
     var response =
-        await apiService.getRequst(endPoint: '&q=$query', isSearch: true);
+        await apiServices.getRequst(endPoint: "&q=$query", isSearch: true);
     response.fold((left) {
-      searchState.value = left;
+      //On Error
+      searchStatus.value = left;
     }, (right) {
+      //On Success
       List<dynamic> jsonRes = right;
       if (jsonRes.isNotEmpty) {
-        searchState(ApiResponse.ok);
-        searchLocations.value = jsonRes
+        searchStatus(ApiResponse.ok);
+        searchedLocations.value = jsonRes
             .map(
-                (json) => SearchLocation.fromJson(json as Map<String, dynamic>))
+              (json) => SearchLocation.fromJson(json as Map<String, dynamic>),
+            )
             .toList();
       }
     });
   }
 
   void selectLocation(String loc) async {
-    await getWeatherData(loc, newLocation: true);
-    searchLocations.clear();
-    searchState.value = ApiResponse.unknownError;
-    updateBackgroundColor();
+    await getWeatherData(loc, newLoc: true);
+    searchedLocations.clear();
+    searchStatus.value = ApiResponse.unknownError;
+    updateBackgrounColor();
     Get.toNamed(AppRoutes.home);
     update();
   }
@@ -91,56 +91,38 @@ class WeatherController extends GetxController {
   Future<void> getUserLocation() async {
     Either<LocationError, LocationData> result =
         await locationServices.getLocation();
-
     result.fold((left) async {
-      handelLocationError(left);
+      _handelLocationError(left);
     }, (right) async {
-      final String lon = right.longitude.toString();
-      final String lat = right.latitude.toString();
-      location = '$lat,$lon';
+      final String lat = right.latitude!.toString();
+      final String lon = right.longitude!.toString();
+      location = "$lat,$lon";
       await getWeatherData(location);
     });
   }
 
   Future<void> refreshWeather() async {
-    final String favLocation =
-        "${weathers.first.location!.name},${weathers.first.location!.region}";
-    await getWeatherData(favLocation);
+    final String favLoc =
+        "${weathers.first.location!.name} ${weathers.first.location!.region}";
+    await getWeatherData(favLoc);
 
-    updateBackgroundColor();
+    updateBackgrounColor();
     update();
   }
 
-  void updateWeathersList({bool newLocation = false}) {
+  void _updateWeathersList({bool newLoc = false}) {
     if (weathers.length > 1) {
-      weathers.insert(0, weathers.last);
-      weathers.removeLast();
-    } else {
-      weathers.first = weathers.last;
-      weathers.removeLast();
+      if (newLoc) {
+        weathers.insert(0, weathers.last);
+        weathers.removeLast();
+      } else {
+        weathers.first = weathers.last;
+        weathers.removeLast();
+      }
     }
   }
 
-  handelLocationError(LocationError error) async {
-    getWeatherCallBack() async {
-      Get.back();
-      await Future.delayed(const Duration(seconds: 2));
-      await getUserLocation();
-    }
-
-    if (error == LocationError.offline) {
-      await AppHelper.showOfflineDialog(
-          cancelFunction: Get.back, confirmFunction: getWeatherCallBack);
-    } else if (error == LocationError.denied) {
-      await AppHelper.showDeniedDialog(
-          cancelFunction: Get.back, confirmFunction: getWeatherCallBack);
-    } else if (error == LocationError.notEnabled) {
-      await AppHelper.showNotEnabledDialog(
-          cancelFunction: Get.back, confirmFunction: getWeatherCallBack);
-    }
-  }
-
-  void updateBackgroundColor() {
+  void updateBackgrounColor() {
     if (weathers.first.current!.isDay == 1) {
       backgroundColor = AppThemes.dayBackground;
     } else {
@@ -148,37 +130,59 @@ class WeatherController extends GetxController {
     }
   }
 
-  void autoRefresh() async {
+  void onReorder(int oldIndex, int newIndex) async {
+    if (oldIndex < newIndex) newIndex--;
+    final Weather tempWeather = weathers.removeAt(oldIndex);
+    weathers.insert(newIndex, tempWeather);
+
+    await refreshWeather();
+  }
+
+  /// Shows a Toast message for each [ApiResponse] error.
+  Future<bool?> _handelGetWeatherError(ApiResponse error) {
+    if (error == ApiResponse.offline) {
+      return AppHelper.showToast("No network connection");
+    } else if (error == ApiResponse.wrongLocation) {
+      return AppHelper.showToast("Wrong location");
+    } else if (error == ApiResponse.serverError) {
+      return AppHelper.showToast("Server error, please try again");
+    } else {
+      return AppHelper.showToast("Unknown error occured.");
+    }
+  }
+
+  /// Shows an AlertDialog for each [LocationError]
+  _handelLocationError(LocationError error) async {
+    getUserLocationCallBack() async {
+      Get.back();
+      await Future.delayed(const Duration(seconds: 2));
+      await getUserLocation();
+    }
+
+    if (error == LocationError.offline) {
+      await AppHelper.showOfflineDialog(
+          cancelFunction: Get.back, confirmFunction: getUserLocationCallBack);
+    } else if (error == LocationError.notEnabled) {
+      await AppHelper.showNotEnabledDialog(
+          cancelFunction: Get.back, confirmFunction: getUserLocationCallBack);
+    } else if (error == LocationError.denied) {
+      await AppHelper.showDeniedDialog(
+          cancelFunction: Get.back, confirmFunction: getUserLocationCallBack);
+    }
+  }
+
+  void _autoRefresh() async {
     if (settingsController.refreshTime.inHours != 0) {
       await refreshWeather();
     }
   }
 
-  Future<void> handleGetWeatherError(ApiResponse error) async {
-    if (error == ApiResponse.offline) {
-      AppHelper.showToast('No network connection');
-    } else if (error == ApiResponse.wrongLocation) {
-      AppHelper.showToast('Wrong location');
-    } else if (error == ApiResponse.serverError) {
-      AppHelper.showToast('Server error, please try again later');
-    } else {
-      AppHelper.showToast('Unknown error occurred.');
-    }
-  }
-
   void onOutlookPageChange(index) {
-    currentOutlookPage = index;
+    currOutlookPage = index;
     update();
   }
 
-  void onReorder(int oldIndex, int newIndex) async {
-    if (oldIndex < newIndex) newIndex--;
-    final Weather tempWeather = weathers.removeAt(oldIndex);
-    weathers.insert(newIndex, tempWeather);
-    await refreshWeather();
-  }
-
-  onlongPressLocation(int index) {
+  onLongPressLocation(int index) {
     if (!selectedLocations.contains(index)) {
       selectedLocations.add(index);
     }
@@ -192,12 +196,12 @@ class WeatherController extends GetxController {
     update();
   }
 
+  /// Delete a location weather from [weathers] list.
   void deleteLocation() async {
     if (selectedLocations.isNotEmpty) {
       if (selectedLocations.contains(0)) {
         await AppHelper.showToast("Can't delete favourite location");
       } else {
-        // final int count = selectedLocations.length;
         selectedLocations.forEach(weathers.removeAt);
         selectedLocations.clear();
         saveWeatherData(location, weathers);
@@ -211,7 +215,6 @@ class WeatherController extends GetxController {
   @override
   void onInit() async {
     isLoading(true);
-    location = box.read('location') ?? location;
     location = box.read<String>('location') ?? location;
     List<dynamic>? savedWeatherList = box.read<List<dynamic>>('weathers');
     if (savedWeatherList != null) {
@@ -219,8 +222,10 @@ class WeatherController extends GetxController {
           savedWeatherList.map((json) => Weather.fromJson(json)).toList();
     }
     await getUserLocation();
-    updateBackgroundColor();
-    timer = Timer.periodic(settingsController.refreshTime, (t) => autoRefresh);
+    updateBackgrounColor();
+    // Start timer
+    timer =
+        Timer.periodic(settingsController.refreshTime, (t) => _autoRefresh());
     isLoading(false);
     super.onInit();
   }
@@ -229,7 +234,6 @@ class WeatherController extends GetxController {
   void onClose() async {
     await box.remove('weathers');
     weathers.clear();
-    outlookPageController.dispose();
     super.onClose();
   }
 }

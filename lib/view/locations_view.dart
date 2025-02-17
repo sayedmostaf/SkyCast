@@ -23,12 +23,6 @@ class LocationsView extends StatelessWidget {
                 size: 30,
               ),
             ),
-            IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.delete_outlined,
-              ),
-            ),
           ],
         ),
         body: SafeArea(
@@ -62,7 +56,7 @@ class LocationsView extends StatelessWidget {
                                       .contains(index),
                                   onTap: () => controller.onTapLocation(index),
                                   onLongPress: () =>
-                                      controller.onlongPressLocation(index),
+                                      controller.onLongPressLocation(index),
                                 ),
                                 SizedBox(
                                   height: 10,

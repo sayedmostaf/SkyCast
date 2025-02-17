@@ -36,12 +36,12 @@ class SearchView extends StatelessWidget {
                     height: 20,
                   ),
                   Obx(() {
-                    if (controller.searchState.value == ApiResponse.ok) {
+                    if (controller.searchStatus.value == ApiResponse.ok) {
                       return SearchResultWidget(
                         controller: controller,
-                        searchedLocation: controller.searchLocations,
+                        searchedLocation: controller.searchedLocations,
                       );
-                    } else if (controller.searchState.value ==
+                    } else if (controller.searchStatus.value ==
                         ApiResponse.offline) {
                       return Column(
                         children: [
@@ -53,7 +53,7 @@ class SearchView extends StatelessWidget {
                           ),
                         ],
                       );
-                    } else if (controller.searchState.value ==
+                    } else if (controller.searchStatus.value ==
                         ApiResponse.loading) {
                       return Column(
                         children: [
